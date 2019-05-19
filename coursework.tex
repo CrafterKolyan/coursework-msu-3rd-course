@@ -1,8 +1,8 @@
-\documentclass[12pt,fleqn]{article}
+\documentclass[12pt, fleqn]{article}
 
 \usepackage[utf8]{inputenc}
 \usepackage[T2A]{fontenc}
-\usepackage{amssymb,amsmath,mathrsfs,amsthm}
+\usepackage{amssymb, amsmath, mathrsfs, amsthm}
 \usepackage[russian]{babel}
 \usepackage{graphicx}
 \usepackage[footnotesize]{caption2}
@@ -43,7 +43,7 @@
 
     \textsf{\large\bfseries
         КУРСОВАЯ РАБОТА СТУДЕНТА 317 ГРУППЫ\\[10mm]
-        <<Методы повышения эффективности обучения, основанные на ансамблях промежуточных решений>>
+        <<Методы повышения эффективности обучения нейронных~сетей, основанные на~ансамблях промежуточных~решений>>
     }\\[10mm]
 
     \begin{flushright}
@@ -52,25 +52,10 @@
             студент 3 курса 317 группы\\
             \emph{Королев Николай Сергеевич}\\[5mm]
             Научный руководитель:\\
-            д.ф-м.н., сотрудник ВЦ~РАН\\
+            д.ф-м.н.\\
             \emph{Сенько Олег Валентинович}
         }
     \end{flushright}
-
-    \begin{tabular}{p{0.45\textwidth}p{0.45\textwidth}}
-        Заведующий кафедрой\newline
-        Математических Методов\newline
-        Прогнозирования, академик РАН
-        &
-        ~\newline~\newline
-        \hfill\hbox to 0.45\textwidth{\hrulefill~Ю. И. Журавлёв}
-    \\[20mm]
-        К защите допускаю\newline
-        \hbox to 0.4\textwidth{<<\hbox to 12mm{\hrulefill}>> \hrulefill~2019 г.}
-        &
-        К защите рекомендую\newline
-        \hbox to 0.45\textwidth{<<\hbox to 12mm{\hrulefill}>> \hrulefill~2019 г.}
-    \end{tabular}
 
     \vspace{\fill}
     Москва, 2019
@@ -140,6 +125,19 @@
 Термины, придуманные самим автором, вводятся словами «назовём» или «будем называть». 
 Обычно этот раздел заканчивается формальной постановкой задачи.
 Именно с~этого раздела стоит начинать писать работу.
+
+Введём следующие обозначения:
+\begin{equation*}
+x_i - \text{вектор признаков, соответствующий $i$-тому объекту}\\
+y_i - \text{класс $i$-того объекта (0 или 1)}
+\end{equation*}
+
+Среднеквадратичной ошибкой предиктора называется:
+\begin{equation*}
+MSE(\hat{f}(x), y) = \dfrac{1}{N}\sum\limits_{i = 1}^N (\hat{f}(x_i) - y_i)^2
+\end{equation*}
+
+Поставим задачу повышения эффективности обучения нейронных сетей.
 
 \subsection{Обзор литературы}
 
