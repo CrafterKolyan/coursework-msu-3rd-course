@@ -522,7 +522,7 @@ FUNCTION {format.names}
   numnames 'namesleft :=
     { namesleft #0 > }
     { s nameptr
-      "{vv~}{ll}{~jj}{~f.}" format.name$ 't :=
+      "{vv~}{ll}{~jj}{~ff}" format.name$ 't :=
       nameptr #1 >
         {
           nameptr #4 =
@@ -559,7 +559,7 @@ FUNCTION {format.names.rev}
   numnames 'namesleft :=
     { namesleft #0 > }
     { s nameptr
-      "{f.}{~vv}{~ll}{, jj}"
+      "{ff}{~vv}{~ll}{, jj}"
       format.name$ 't :=
       nameptr #1 >
         {
