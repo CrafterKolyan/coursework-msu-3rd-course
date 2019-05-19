@@ -1,8 +1,8 @@
 # Курсовая работа студента 317 группы Королева Николая ВМК МГУ (2019 год)
 
 ## Компиляция
-При компиляции `.bib` файлов необходимо использовать следующую команду:<br />
-`bibtex8.exe --huge --csfile "cp1251rus.csf" <arguments>`
+В папке проекта:<br />
+`texify.exe --pdf --clean coursework.tex`
 
 ## Авторские права
 Файл шаблона взят с [сайта ММП](http://www.machinelearning.ru/wiki/index.php?title=%D0%9C%D0%9C%D0%9F)
