@@ -1,6 +1,6 @@
-# Курсовая работа студента 317 группы Королева Николая ВМК МГУ (2019 год)
+# РљСѓСЂСЃРѕРІР°СЏ СЂР°Р±РѕС‚Р° СЃС‚СѓРґРµРЅС‚Р° 317 РіСЂСѓРїРїС‹ РљРѕСЂРѕР»РµРІР° РќРёРєРѕР»Р°СЏ Р’РњРљ РњР“РЈ (2019 РіРѕРґ)
 
-Файл шаблона взят с [сайта ММП](http://www.machinelearning.ru/wiki/index.php?title=%D0%9C%D0%9C%D0%9F)
+Р¤Р°Р№Р» С€Р°Р±Р»РѕРЅР° РІР·СЏС‚ СЃ [СЃР°Р№С‚Р° РњРњРџ](http://www.machinelearning.ru/wiki/index.php?title=%D0%9C%D0%9C%D0%9F)
 
-Спасибо [Mikhail](https://www.blogger.com/profile/08101531274522320966) за исправление русских инициалов в UTF-8 для `gost71s.bst`:<br>
+РЎРїР°СЃРёР±Рѕ [Mikhail](https://www.blogger.com/profile/08101531274522320966) Р·Р° РёСЃРїСЂР°РІР»РµРЅРёРµ СЂСѓСЃСЃРєРёС… РёРЅРёС†РёР°Р»РѕРІ РІ UTF-8 РґР»СЏ `gost71s.bst`:<br>
 [http://plumbum-blog.blogspot.com/2010/10/bibtex-miktex-gost780s.html](http://plumbum-blog.blogspot.com/2010/10/bibtex-miktex-gost780s.html)
