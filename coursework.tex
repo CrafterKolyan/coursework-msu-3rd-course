@@ -39,9 +39,12 @@
 \newcommand{\predictionfunction}{\hat{f}}
 \newcommand{\ensemblefunction}{a}
 \newcommand{\distinguishparameter}{\alpha}
+\newcommand{\objects}{X}
+\newcommand{\results}{Y}
+\newcommand{\predictedobjects}{\hat{\objects}}
 
 \newcommand{\numberobjects}{N}
-\newcommand{\numberpredictionfunctions}{m}
+\newcommand{\numberpredictionfunctions}{M}
 
 \newcommand{\for}[3]{\sum\limits_{#1 = #2}^{#3}}  % Usage: \for{index}{begin}{end}
 \newcommand{\forn}[2]{\for{#1}{1}{#2}}  % Usage: \forn{index}{end}
@@ -201,31 +204,37 @@ $\many{x_}{}{\numberobjects}$~--~точки в некотором векторн
 \section{Ансамбль промежуточных решений}
 
 Пусть:\\
-$X$ - матрица из $\numberobjects$ строк, $i$-ая строка равна $x_i$;\\
-$Y$ - вектор из $\numberobjects$ элементов, $i$-ый элемент равен $y_i$.
+$\objects$ - матрица из $\numberobjects$ строк, $i$-ая строка равна $x_i$;\\
+$\results$ - вектор из $\numberobjects$ элементов, $i$-ый элемент равен $y_i$.
 
-Пусть $\predictionfunction_1(x)$ представима в виде функции с параметрами $\optimizationmethodfunction(x, \theta)$ и была получена методом оптимизации функционала среднеквадратичной ошибки
-$\mse(\predictionfunction_1(x), X, Y) = \dfrac{1}{\numberobjects}\forn{i}{\numberobjects} (\predictionfunction_1(x_i) - y_i)^2$:
+Пусть $\predictionfunction_1(x)$ представима в виде функции с параметрами $\optimizationmethodfunction(x, \theta)$ и была получена некоторым методом оптимизации функционала среднеквадратичной ошибки
+$\mse(\predictionfunction_1(x), \objects, \results) = \dfrac{1}{\numberobjects}\forn{i}{\numberobjects} (\predictionfunction_1(x_i) - y_i)^2$:
 $$\predictionfunction_1(x) = \optimizationmethodfunction(x, \theta_1)$$
 
-\subsection{Вычисление промежуточных решений}
+\subsection{Поиск промежуточных решений}
 
 Будем искать функции $\predictionfunction_2(x), \predictionfunction_3(x), \dots, \predictionfunction_\numberpredictionfunctions(x)$ в виде $\optimizationmethodfunction(x, \theta)$, минимизируя следующий функционал:
 $$
-\loss(\predictionfunction_k(x), X, Y) = \mse(\optimizationmethodfunction(x, \theta_k), X, Y) -
+\loss(\predictionfunction_k(x), \objects, \results) = \mse(\optimizationmethodfunction(x, \theta_k), \objects, \results) -
 \dfrac{\distinguishparameter}{k - 1}
 \forn{i}{k - 1}\norm{\theta_k - \theta_i}^2, \quad k = 2, 3, \dots, \numberpredictionfunctions,
 $$
 где $\distinguishparameter \geq 0$ является гиперпараметром.
 
-Данный функционал поощряет функции $\predictionfunction_i(x)$ иметь различные параметры $\theta_i$. Таким образом мы добиваемся максимального расхождения значений функций. Впоследствии это уменьшит среднеквадратичную ошибку функции-ансамбля $\predictionfunction(x)$, что следует из уравнения \reference{OptimizedDifferenceDecomposition}.
+Данный функционал поощряет функции $\predictionfunction_i(x)$ иметь различные параметры $\theta_i$. Таким образом мы пытаемся добиться максимального расхождения значений функций. Впоследствии это уменьшит среднеквадратичную ошибку функции-ансамбля $\predictionfunction(x)$, что следует из уравнения \reference{OptimizedDifferenceDecomposition}.
 
-Стоит отметить, что при больших $k$ вычисление данного функционала может быть вычислительно затратным, так как $\forn{i}{k - 1}\norm{\theta_k - \theta_i}^2$ в общем случае требует $O(k)$ времени. Если же все $\theta_i$ лежат в некотором евклидовом, данное выражение переписывается в виде:
+Стоит отметить, что при больших $k$ вычисление данного функционала может быть вычислительно затратным, так как $\forn{i}{k - 1}\norm{\theta_k - \theta_i}^2$ в общем случае требует $O(k)$ времени. Если все $\theta_i$ лежат в некотором евклидовом, данное выражение переписывается в виде:
 $$
 \forn{i}{k - 1}\norm{\theta_k - \theta_i}^2 = (k - 1)\norm{\theta_k}^2 - 2\scalarproduct{\theta_k, \forn{i}{k - 1} \theta_i} + \forn{i}{k - 1}\norm{\theta_i}^2.
 $$
 
 Значения выражений $\forn{i}{k - 1} \theta_i$ и $\forn{i}{k - 1}\norm{\theta_i}^2$ можно поддерживать в течении всего процесса поиска функции $\predictionfunction_k(x)$ и пересчитывать за $O(1)$ времени при переходе к поиску~$\predictionfunction_{k+1}(x)$.
+
+\subsection{Поиск функции-ансамбля}
+
+Составим матрицу $\predictedobjects$ размера $\numberobjects \times \numberpredictionfunctions$, где $\predictedobjects_{i, j} = \predictionfunction_j(x_i)$.
+Для поиска функции-ансамбля $\predictionfunction(x) = \ensemblefunctionfull$ необходимо найти функцию $\ensemblefunction(\many{\hat{x}_}{}{\numberpredictionfunctions}) = \ensemblefunction(\hat{x})$.
+Представим её в виде $\optimizationmethodfunction(x, \theta)$ и найдём из минимизации функционала $\mse(\ensemblefunction(\hat{x}), \predictedobjects, \results)$.
 
 \section{Вычислительные эксперименты}
 
