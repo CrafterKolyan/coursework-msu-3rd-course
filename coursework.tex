@@ -31,6 +31,16 @@
 % Дополнительные команды для личных обозначений
 \newcommand{\expectation}{\mathop{\mathbb{E}}}
 \newcommand{\predictionfunction}{\hat{f}}
+\newcommand{\ensemblefunction}{a}
+
+\newcommand{\numberobjects}{N}
+\newcommand{\numberpredictionfunctions}{m}
+
+\newcommand{\ensemblefunctionfull}{\ensemblefunction(\predictionfunction_1(x), \predictionfunction_2(x), \dots, \predictionfunction_\numberpredictionfunctions(x))}
+
+\newcommand{\for}[3]{\sum\limits_{#1 = #2}^{#3}}  % Usage: \for{index}{begin}{end}
+\newcommand{\forn}[2]{\for{#1}{1}{#2}}  % Usage: \forn{index}{end}
+\newcommand{\forin}[1]{\forn{i}{#1}}  % Usage: \forin{end}
 
 \begin{document}
 
@@ -123,10 +133,13 @@
 
 \subsection{Определения и~обозначения}
 
-Есть точки $x_1, x_2, ..., x_N$ в некотором векторном пространстве и значения $y_1, y_2, \dots, y_N$, соответствующие им.
-Предположим, что $y(x) = f(x) + \varepsilon$, где $\varepsilon$ - случайная величина с нулевым математическим ожиданием и дисперсией $\sigma^2$. Стоит задача нахождения функции предиктора $\predictionfunction(x)$, приближающей функцию $f(x)$. Известно разложение математического ожидания квадратичной ошибки на смещение и дисперсию:
+Поставим задачу повышения эффективности обучения нейронных сетей.
+
+\subsection{Теоретическая часть}
+Есть точки $x_1, x_2, ..., x_\numberobjects$ в некотором векторном пространстве и значения $y_1, y_2, \dots, y_\numberobjects$, соответствующие им.
+Предположим, что $y(x) = f(x) + \varepsilon$, где $\varepsilon$~--~случайная величина с нулевым математическим ожиданием и дисперсией $\sigma^2$. Стоит задача нахождения функции предиктора $\predictionfunction(x)$, приближающей функцию $f(x)$. Из~\cite{BiasVarianceDecompositionZeroOneSquaredLoss} известно разложение математического ожидания квадратичной ошибки на смещение и дисперсию:
 \begin{equation*}
-\expectation \left( \predictionfunction(x) - y \right)^2 =
+\expectation \left[ \left( \predictionfunction(x) - y \right)^2 \right] =
 \left(
 	\expectation \predictionfunction(x) - f(x)
 \right)^2  +
@@ -135,7 +148,34 @@
 \right) + \sigma^2
 \end{equation*}
 
-Поставим задачу повышения эффективности обучения нейронных сетей.
+Для уменьшения как смещения, так и дисперсии $\predictionfunction(x)$ используются ансамбли:
+\begin{equation*}
+\predictionfunction(x) = \ensemblefunctionfull
+\end{equation*}
+
+В~\cite{OptimalConvexCorrectingProcedures} было доказано, что в случае, когда функция $\ensemblefunctionfull$ является выпуклой комбинацией своих аргументов:
+\begin{equation*}
+\ensemblefunctionfull = 
+\forn{i}{\numberpredictionfunctions} c_i \predictionfunction_i(x)
+\end{equation*}
+\begin{equation*}
+\forin{\numberpredictionfunctions} c_i = 1; \quad c_i \geq 0, \quad i = 1, 2, \dots, \numberpredictionfunctions
+\end{equation*}
+выполнено
+\begin{equation*}
+\expectation \left[\left( \predictionfunction(x) - y \right)^2 \right] =
+\forn{i}{\numberpredictionfunctions} c_i
+\expectation \left[ \left(
+	\predictionfunction_i(x) - y
+\right)^2 \right] 
+- \dfrac{1}{2}
+\forn{i}{\numberpredictionfunctions} \forn{j}{\numberpredictionfunctions} c_i c_j
+\expectation \left[ \left(
+	\predictionfunction_i(x) - \predictionfunction_j(x)
+\right)^2 \right]
+\end{equation*}
+
+Соответственно, для уменьшения среднеквадратической ошибки необходимо уменьшать среднеквадратическую ошибку каждого предиктора $\predictionfunction_i(x)$, а также увеличивать расхождение между прогнозами различных предикторов.
 
 \subsection{Обзор литературы}
 
@@ -234,7 +274,7 @@
 \renewcommand{\bibname}{Список литературы}
 \addcontentsline{toc}{section}{\bibname}
 
-\nocite{DokSen11, DokSen15}
+\nocite{OptimalConvexCorrectingProcedures, ConvexCombinationsBestCorrelatedWithResponse}
 
 \def\BibUrl#1.{}\def\BibAnnote#1.{}
 %\def\BibUrl#1{\\{\footnotesize\tt\def~{\char126} http://#1}}
