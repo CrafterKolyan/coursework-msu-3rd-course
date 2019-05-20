@@ -36,11 +36,13 @@
 \newcommand{\numberobjects}{N}
 \newcommand{\numberpredictionfunctions}{m}
 
-\newcommand{\ensemblefunctionfull}{\ensemblefunction(\predictionfunction_1(x), \predictionfunction_2(x), \dots, \predictionfunction_\numberpredictionfunctions(x))}
-
 \newcommand{\for}[3]{\sum\limits_{#1 = #2}^{#3}}  % Usage: \for{index}{begin}{end}
 \newcommand{\forn}[2]{\for{#1}{1}{#2}}  % Usage: \forn{index}{end}
 \newcommand{\forin}[1]{\forn{i}{#1}}  % Usage: \forin{end}
+
+\newcommand{\many}[3]{#1 1 #2, #1 2 #2, \dots, #1 #3 #2}  % Usage: \many{prefix}{suffix}{end}
+
+\newcommand{\ensemblefunctionfull}{\ensemblefunction(\many{\predictionfunction_}{(x)}{\numberpredictionfunctions})}
 
 \begin{document}
 
@@ -133,11 +135,10 @@
 
 \subsection{Постановка задачи}
 
-Поставим задачу повышения эффективности обучения нейронных сетей.
+$\many{x_}{}{\numberobjects}$~--~точки в некотором векторном пространстве; $\many{y_}{}{\numberobjects}$~--~ значения, соответствующие этим точкам. При этом $y_i = y(x_i) = f(x_i) + \varepsilon$, где $\varepsilon$~--~случайная величина с нулевым математическим ожиданием и дисперсией $\sigma^2$. Пусть также задана функция $\predictionfunction_1(x)$, которая приближает функцию $f(x)$. Стоит задача нахождения $\numberpredictionfunctions - 1$ функции $\predictionfunction_2(x), \predictionfunction_3(x), \dots, \predictionfunction_\numberpredictionfunctions(x)$, а также функции-ансамбля $\predictionfunction(x) = \ensemblefunctionfull$, приближающей функцию $f(x)$ лучше чем любая из функций $\predictionfunction_i(x), \; i = \many{}{}{\numberpredictionfunctions}$.
 
 \subsection{Теоретическая часть}
-$x_1, x_2, ..., x_\numberobjects$~--~точки в некотором векторном пространстве; $y_1, y_2, \dots, y_\numberobjects$~--~ значения, соответствующие этим точкам.
-Предположим, что $y_i = y(x_i) = f(x_i) + \varepsilon$, где $\varepsilon$~--~случайная величина с нулевым математическим ожиданием и дисперсией $\sigma^2$. Стоит задача нахождения функции предиктора $\predictionfunction(x)$, приближающей функцию $f(x)$. Из~\cite{BiasVarianceDecompositionZeroOneSquaredLoss} известно разложение математического ожидания квадратичной ошибки на смещение и дисперсию:
+Из~\cite{BiasVarianceDecompositionZeroOneSquaredLoss} известно разложение математического ожидания квадратичной ошибки на смещение и дисперсию:
 \begin{equation*}
 \expectation \left[ \left( \predictionfunction(x) - y \right)^2 \right] =
 \left(
@@ -159,7 +160,7 @@ $x_1, x_2, ..., x_\numberobjects$~--~точки в некотором векто
 \forn{i}{\numberpredictionfunctions} c_i \predictionfunction_i(x)
 \end{equation*}
 \begin{equation*}
-\forin{\numberpredictionfunctions} c_i = 1; \quad c_i \geq 0, \quad i = 1, 2, \dots, \numberpredictionfunctions
+\forin{\numberpredictionfunctions} c_i = 1; \quad c_i \geq 0, \quad i = \many{}{}{\numberpredictionfunctions}
 \end{equation*}
 выполнено
 \begin{equation*}
