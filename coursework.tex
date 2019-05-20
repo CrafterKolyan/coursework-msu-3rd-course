@@ -157,10 +157,10 @@ $\many{x_}{}{\numberobjects}$~--~точки в некотором векторн
 В~\cite{OptimalConvexCorrectingProcedures} было доказано, что в случае, когда функция $\ensemblefunctionfull$ является выпуклой комбинацией своих аргументов:
 \begin{equation*}
 \ensemblefunctionfull = 
-\forn{i}{\numberpredictionfunctions} c_i \predictionfunction_i(x)
+\forn{i}{\numberpredictionfunctions} c_i \predictionfunction_i(x),
 \end{equation*}
 \begin{equation*}
-\forin{\numberpredictionfunctions} c_i = 1; \quad c_i \geq 0, \quad i = \many{}{}{\numberpredictionfunctions}
+\forin{\numberpredictionfunctions} c_i = 1; \quad c_i \geq 0, \quad i = \many{}{}{\numberpredictionfunctions};
 \end{equation*}
 выполнено
 \begin{equation*}
@@ -178,21 +178,17 @@ $\many{x_}{}{\numberobjects}$~--~точки в некотором векторн
 
 Соответственно, для уменьшения среднеквадратичной ошибки необходимо уменьшать среднеквадратичную ошибку каждого предиктора $\predictionfunction_i(x)$, а также увеличивать расхождение между прогнозами различных предикторов.
 
-\subsection{Обзор литературы}
+\subsection{Существующие методы}
 
-Лучше, чтобы название этого подраздела было содержательным, 
-например, общепринятым названием задачи, проблемы или метода,
-рассматриваемого в~данной работе. 
+В большинстве случаев функция-ансамбль $\predictionfunction(x) = \ensemblefunctionfull$ является линейной комбинацией функций предикторов $\many{\predictionfunction_}{(x)}{\numberpredictionfunctions}$. Коэффициенты ищутся при помощи методов регрессионного анализа:
+\begin{itemize}
+\item гребневая регрессия~\cite{Ridge}
+\item метод Лассо~\cite{Lasso}
+\item эластичная сеть~\cite{ElasticNet}
+\item регрессионная модель, отбирающая признаки, наиболее коррелирующие с откликом~\cite{ConvexCombinationsBestCorrelatedWithResponse}
+\end{itemize}
 
-Перечисляются подходы, методы, факты, на которые существенно опирается данная работа, 
-но~которые могут быть не~известны широкому кругу читателей.
-Здесь ссылки на литературу обязательны. 
-Теоремы только формулируются, но не~доказываются.
-
-Данный раздел преследует две цели. 
-Во-первых, сделать работу самодостаточной~--- дать необходимый минимум информации тем читателям,
-которые не~очень хорошо ориентируются в~теме, но желают поближе познакомиться именно с~данной работой.
-Во-вторых, облегчить сопоставление полученных автором результатов с~ранее известными.
+Функции $\many{\predictionfunction_}{(x)}{\numberpredictionfunctions}$ в таких случаях обычно независимы друг от друга и получены методом оптимизации некоторого функционала.
 
 \section{Новые подходы и~результаты}
 
