@@ -30,17 +30,25 @@
 
 % Дополнительные команды для личных обозначений
 \newcommand{\expectation}{\mathop{\mathbb{E}}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\loss}{\mathop{\mathcal{L}}}
+\newcommand{\mse}{\mathop{MSE}}
+\newcommand{\scalarproduct}[1]{\langle #1 \rangle}
+
+\newcommand{\optimizationmethodfunction}{\tilde{f}}
 \newcommand{\predictionfunction}{\hat{f}}
 \newcommand{\ensemblefunction}{a}
+\newcommand{\distinguishparameter}{\alpha}
 
 \newcommand{\numberobjects}{N}
 \newcommand{\numberpredictionfunctions}{m}
 
 \newcommand{\for}[3]{\sum\limits_{#1 = #2}^{#3}}  % Usage: \for{index}{begin}{end}
 \newcommand{\forn}[2]{\for{#1}{1}{#2}}  % Usage: \forn{index}{end}
-\newcommand{\forin}[1]{\forn{i}{#1}}  % Usage: \forin{end}
 
 \newcommand{\many}[3]{#1 1 #2, #1 2 #2, \dots, #1 #3 #2}  % Usage: \many{prefix}{suffix}{end}
+
+\newcommand{\reference}[1]{(\ref{#1})}
 
 \newcommand{\ensemblefunctionfull}{\ensemblefunction(\many{\predictionfunction_}{(x)}{\numberpredictionfunctions})}
 
@@ -160,10 +168,10 @@ $\many{x_}{}{\numberobjects}$~--~точки в некотором векторн
 \forn{i}{\numberpredictionfunctions} c_i \predictionfunction_i(x),
 \end{equation*}
 \begin{equation*}
-\forin{\numberpredictionfunctions} c_i = 1; \quad c_i \geq 0, \quad i = \many{}{}{\numberpredictionfunctions};
+\forn{i}{\numberpredictionfunctions} c_i = 1; \quad c_i \geq 0, \quad i = \many{}{}{\numberpredictionfunctions};
 \end{equation*}
 выполнено
-\begin{equation*}
+\begin{equation}\label{OptimizedDifferenceDecomposition}
 \expectation \left[\left( \predictionfunction(x) - y \right)^2 \right] =
 \forn{i}{\numberpredictionfunctions} c_i
 \expectation \left[ \left(
@@ -174,7 +182,7 @@ $\many{x_}{}{\numberobjects}$~--~точки в некотором векторн
 \expectation \left[ \left(
 	\predictionfunction_i(x) - \predictionfunction_j(x)
 \right)^2 \right]
-\end{equation*}
+\end{equation}
 
 Соответственно, для уменьшения среднеквадратичной ошибки необходимо уменьшать среднеквадратичную ошибку каждого предиктора $\predictionfunction_i(x)$, а также увеличивать расхождение между прогнозами различных предикторов.
 
@@ -190,15 +198,35 @@ $\many{x_}{}{\numberobjects}$~--~точки в некотором векторн
 
 Функции $\many{\predictionfunction_}{(x)}{\numberpredictionfunctions}$ в таких случаях обычно независимы друг от друга и получены методом оптимизации некоторого функционала.
 
-\section{Предлагаемый подход}
+\section{Ансамбль промежуточных решений}
 
-Название этого раздела обязательно надо заменить на~содержательное. 
-В~этом разделе, как правило, много подразделов. 
+Пусть:\\
+$X$ - матрица из $\numberobjects$ строк, $i$-ая строка равна $x_i$;\\
+$Y$ - вектор из $\numberobjects$ элементов, $i$-ый элемент равен $y_i$.
 
-В~дипломной работе не~стоит делать более двух уровней,
-достаточно разделов и~подразделов.
-Будете писать диссертацию или монографию~--- сделаете три уровня. 
-  
+Пусть $\predictionfunction_1(x)$ представима в виде функции с параметрами $\optimizationmethodfunction(x, \theta)$ и была получена методом оптимизации функционала среднеквадратичной ошибки
+$\mse(\predictionfunction_1(x), X, Y) = \dfrac{1}{\numberobjects}\forn{i}{\numberobjects} (\predictionfunction_1(x_i) - y_i)^2$:
+$$\predictionfunction_1(x) = \optimizationmethodfunction(x, \theta_1)$$
+
+\subsection{Вычисление промежуточных решений}
+
+Будем искать функции $\predictionfunction_2(x), \predictionfunction_3(x), \dots, \predictionfunction_\numberpredictionfunctions(x)$ в виде $\optimizationmethodfunction(x, \theta)$, минимизируя следующий функционал:
+$$
+\loss(\predictionfunction_k(x), X, Y) = \mse(\optimizationmethodfunction(x, \theta_k), X, Y) -
+\dfrac{\distinguishparameter}{k - 1}
+\forn{i}{k - 1}\norm{\theta_k - \theta_i}^2, \quad k = 2, 3, \dots, \numberpredictionfunctions,
+$$
+где $\distinguishparameter \geq 0$ является гиперпараметром.
+
+Данный функционал поощряет функции $\predictionfunction_i(x)$ иметь различные параметры $\theta_i$. Таким образом мы добиваемся максимального расхождения значений функций. Впоследствии это уменьшит среднеквадратичную ошибку функции-ансамбля $\predictionfunction(x)$, что следует из уравнения \reference{OptimizedDifferenceDecomposition}.
+
+Стоит отметить, что при больших $k$ вычисление данного функционала может быть вычислительно затратным, так как $\forn{i}{k - 1}\norm{\theta_k - \theta_i}^2$ в общем случае требует $O(k)$ времени. Если же все $\theta_i$ лежат в некотором евклидовом, данное выражение переписывается в виде:
+$$
+\forn{i}{k - 1}\norm{\theta_k - \theta_i}^2 = (k - 1)\norm{\theta_k}^2 - 2\scalarproduct{\theta_k, \forn{i}{k - 1} \theta_i} + \forn{i}{k - 1}\norm{\theta_i}^2.
+$$
+
+Значения выражений $\forn{i}{k - 1} \theta_i$ и $\forn{i}{k - 1}\norm{\theta_i}^2$ можно поддерживать в течении всего процесса поиска функции $\predictionfunction_k(x)$ и пересчитывать за $O(1)$ времени при переходе к поиску~$\predictionfunction_{k+1}(x)$.
+
 \section{Вычислительные эксперименты}
 
 Цель данного раздела:
@@ -258,15 +286,6 @@ $\many{x_}{}{\numberobjects}$~--~точки в некотором векторн
 Иногда в~Заключении приводится список направлений дальнейших исследований.
 
 \newpage
-Список литературы необходим в~любой научной публикации. 
-В дипломной работе он~обязателен. 
-Дурным тоном считается:
-ссылаться на работы только одного-двух авторов (например, себя или шефа);
-ссылаться на слишком малое число работ;
-ссылаться только на очень старые работы;
-ссылаться на работы, которых автор ни разу не видел;
-ссылаться на~работы, которые не~упоминаются в~тексте
-или которые не~имеют отношения к~данному тексту.
 
 \renewcommand{\bibname}{Список литературы}
 \addcontentsline{toc}{section}{\bibname}
